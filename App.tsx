@@ -7,6 +7,7 @@ import ProductDetail from './components/ProductDetail';
 import CartDrawer from './components/CartDrawer';
 import Checkout from './components/Checkout';
 import AshforgeLogo from './components/AshforgeLogo';
+import OperationsBanner from './components/OperationsBanner';
 import { PRODUCTS } from './constants';
 import { Product, CartItem, AppView } from './types';
 
@@ -20,7 +21,7 @@ const App: React.FC = () => {
     setCart(prev => {
       const existing = prev.find(item => item.id === product.id);
       if (existing) {
-        return prev.map(item => 
+        return prev.map(item =>
           item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
         );
       }
@@ -70,13 +71,13 @@ const App: React.FC = () => {
   return (
     <div className="min-h-screen selection:bg-[#ff3333] selection:text-white">
       <LavaBackground />
-      
-      <Header 
+
+      <Header
         cartCount={cart.reduce((s, i) => s + i.quantity, 0)}
         onCartToggle={() => setIsCartOpen(!isCartOpen)}
         onNavigate={(v) => {
-            setView(v);
-            if(v === 'SHOP') setSelectedProduct(null);
+          setView(v);
+          if (v === 'SHOP') setSelectedProduct(null);
         }}
       />
 
@@ -84,26 +85,14 @@ const App: React.FC = () => {
         {view === 'SHOP' && (
           <div className="max-w-7xl mx-auto px-6 pt-48 pb-24">
             <div className="mb-24 space-y-8 animate-in fade-in slide-in-from-bottom-6 duration-1000">
-              <div className="flex items-center gap-4">
-                 <div className="w-12 h-[2px] bg-[#ff3333]" />
-                 <span className="text-[#ff3333] font-black tracking-[0.6em] text-[10px] uppercase animate-pulse">Operational Status: Optimal</span>
-              </div>
-              <h2 className="text-7xl md:text-8xl lg:text-[10rem] font-black text-white tracking-tighter uppercase leading-[0.8] drop-shadow-2xl">
-                FORGED <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#ff3333] to-[#990000]">INTEGRITY</span>
-              </h2>
-              <div className="max-w-xl">
-                <p className="text-zinc-500 text-lg font-medium leading-relaxed uppercase tracking-wider">
-                  Resilience engineered for the high-intensity theater. Every unit undergoes thermal-stress cycles to ensure maximum structural endurance.
-                </p>
-              </div>
+              <OperationsBanner />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-16">
               {PRODUCTS.map((product) => (
-                <ProductCard 
-                  key={product.id} 
-                  product={product} 
+                <ProductCard
+                  key={product.id}
+                  product={product}
                   onClick={() => navigateToPDP(product)}
                   onAddToCart={(e) => {
                     e.stopPropagation();
@@ -117,8 +106,8 @@ const App: React.FC = () => {
 
         {view === 'PDP' && selectedProduct && (
           <div className="animate-in fade-in duration-700">
-            <ProductDetail 
-              product={selectedProduct} 
+            <ProductDetail
+              product={selectedProduct}
               onAddToCart={handleAddToCart}
               onBack={navigateToShop}
             />
@@ -127,7 +116,7 @@ const App: React.FC = () => {
 
         {view === 'CHECKOUT' && (
           <div className="animate-in fade-in duration-700">
-            <Checkout 
+            <Checkout
               items={cart}
               onComplete={completeCheckout}
               onBack={navigateToShop}
@@ -136,7 +125,7 @@ const App: React.FC = () => {
         )}
       </main>
 
-      <CartDrawer 
+      <CartDrawer
         isOpen={isCartOpen}
         onClose={() => setIsCartOpen(false)}
         items={cart}
@@ -156,12 +145,12 @@ const App: React.FC = () => {
               Industrial gear for those who operate where others retreat. We engineer the gear that engineers the future.
             </p>
             <div className="flex gap-6">
-               <div className="w-10 h-10 border border-zinc-800 flex items-center justify-center text-zinc-600 hover:text-[#ff3333] hover:border-[#ff3333] transition-all cursor-pointer group">
-                 <AshforgeLogo className="w-5 h-5 opacity-40 group-hover:opacity-100 transition-opacity" />
-               </div>
+              <div className="w-10 h-10 border border-zinc-800 flex items-center justify-center text-zinc-600 hover:text-[#ff3333] hover:border-[#ff3333] transition-all cursor-pointer group">
+                <AshforgeLogo className="w-5 h-5 opacity-40 group-hover:opacity-100 transition-opacity" />
+              </div>
             </div>
           </div>
-          
+
           <div className="space-y-6">
             <p className="text-[10px] font-black text-[#ff3333] tracking-[0.4em] uppercase">Data Points</p>
             <nav className="flex flex-col gap-4 text-xs font-black tracking-widest text-zinc-500">
@@ -181,7 +170,7 @@ const App: React.FC = () => {
             </p>
           </div>
         </div>
-        
+
         <div className="max-w-7xl mx-auto px-6 pt-24 mt-24 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6 opacity-30 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-1000">
           <p className="text-zinc-500 text-[10px] font-mono tracking-widest uppercase">
             &copy; 2026 ASHFORGE INDUSTRIES // AUTH: 9918-XPR
