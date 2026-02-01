@@ -1,0 +1,103 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASHFORGE | Resilience Engineered</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --magma: #ff3333;
+            --obsidian: #050505;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--obsidian);
+            color: #b0b0b0;
+            overflow-x: hidden;
+        }
+
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--obsidian);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--magma);
+        }
+
+        /* Mechanical Glitch Effect */
+        .glitch-hover:hover {
+            animation: glitch-skew 0.3s cubic-bezier(.25,.46,.45,.94) both infinite;
+        }
+
+        @keyframes glitch-skew {
+            0% { transform: skew(0deg); }
+            20% { transform: skew(-2deg) translateX(-2px); }
+            40% { transform: skew(1deg) translateX(2px); }
+            60% { transform: skew(-1deg) translateX(-1px); }
+            80% { transform: skew(0.5deg) translateX(1px); }
+            100% { transform: skew(0deg); }
+        }
+
+        /* Scanline Overlay */
+        .scanlines::before {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 100;
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
+            opacity: 0.15;
+        }
+
+        /* Magma Glow */
+        .magma-glow {
+            box-shadow: 0 0 20px rgba(255, 51, 51, 0.1);
+            transition: box-shadow 0.3s ease;
+        }
+        .magma-glow:hover {
+            box-shadow: 0 0 40px rgba(255, 51, 51, 0.3);
+        }
+
+        /* Logo Pulse Animation */
+        @keyframes logo-energy {
+            0%, 100% { 
+                filter: drop-shadow(0 0 5px rgba(255, 51, 51, 0.5)) brightness(1);
+                transform: scale(1);
+            }
+            50% { 
+                filter: drop-shadow(0 0 20px rgba(255, 51, 51, 0.8)) brightness(1.2);
+                transform: scale(1.05);
+            }
+        }
+        .animate-logo-energy {
+            animation: logo-energy 4s ease-in-out infinite;
+        }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "lucide-react": "https://esm.sh/lucide-react@^0.563.0",
+    "react/": "https://esm.sh/react@^19.2.4/",
+    "react": "https://esm.sh/react@^19.2.4",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body class="scanlines">
+    <div id="root"></div>
+<script type="module" src="/index.tsx"></script>
+</body>
+</html>
