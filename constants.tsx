@@ -8,7 +8,7 @@ export const PRODUCTS: Product[] = [
     name: 'Quicksilver Cast',
     category: 'Precision Mastery',
     description: 'High-visibility metallic grey with precision-etched textures designed to reflect the pursuit of perfection. Engineered for low-drag operations and maximum agility.',
-    price: 1799,
+    price: 799,
     image: '/product-quicksilver.jpg',
     images: [
       '/product-quicksilver.jpg',
@@ -24,7 +24,7 @@ export const PRODUCTS: Product[] = [
     name: 'Cobalt Temper',
     category: 'Thermal Regulation',
     description: 'Industrial blue performance set utilizing hexagonal conduits to dissipate heat like a high-performance engine. Built for sustained high-intensity environments.',
-    price: 2450,
+    price: 799,
     image: '/product-cobalt.jpg',
     images: [
       '/product-cobalt.jpg',
@@ -39,7 +39,7 @@ export const PRODUCTS: Product[] = [
     name: 'Ember Edge',
     category: 'Peak Aggression',
     description: 'Our most aggressive design, featuring deep red panels that mimic the glow of a furnace at full tilt. Command authority in any tactical or industrial theatre.',
-    price: 3100,
+    price: 799,
     image: '/product-ember.jpg',
     images: [
       '/product-ember.jpg',
@@ -54,7 +54,7 @@ export const PRODUCTS: Product[] = [
     name: 'Vortex Core',
     category: 'Aero Dynamics',
     description: 'A masterpiece of fluid dynamics, the Vortex Core features matte charcoal finishes with oscillating air-flow channels for extreme cooling.',
-    price: 1550,
+    price: 799,
     image: 'https://picsum.photos/seed/forge4/800/1000',
     images: [
       'https://picsum.photos/seed/forge4/800/1000'
