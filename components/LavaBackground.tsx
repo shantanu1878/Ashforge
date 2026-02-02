@@ -45,7 +45,7 @@ const LavaBackground: React.FC = () => {
       update() {
         this.y -= this.speedY;
         this.x += this.speedX + Math.sin(this.y * 0.01) * this.wobble;
-        
+
         if (this.y < -20) {
           this.reset();
         }
@@ -57,18 +57,12 @@ const LavaBackground: React.FC = () => {
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         ctx.fillStyle = this.color;
         ctx.globalAlpha = this.opacity;
-        
-        // Add a bloom effect to brighter particles
-        if (this.size > 2) {
-          ctx.shadowBlur = 15;
-          ctx.shadowColor = this.color;
-        } else {
-          ctx.shadowBlur = 0;
-        }
-        
+
+        // Performance optimization: Removed simplified bloom effect for smoother mobile fps
+        // Only very large particles get a simple glow if needed, but avoiding context state changes is faster
+
         ctx.fill();
         ctx.globalAlpha = 1;
-        ctx.shadowBlur = 0;
       }
     }
 
@@ -76,7 +70,12 @@ const LavaBackground: React.FC = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
       particles = [];
-      const count = Math.min(80, Math.floor(window.innerWidth / 15));
+      // Reduced particle count for mobile performance
+      const isMobile = window.innerWidth < 768;
+      const count = isMobile
+        ? Math.min(30, Math.floor(window.innerWidth / 20))
+        : Math.min(80, Math.floor(window.innerWidth / 15));
+
       for (let i = 0; i < count; i++) {
         particles.push(new Particle());
       }
@@ -85,7 +84,7 @@ const LavaBackground: React.FC = () => {
     const animate = () => {
       ctx.fillStyle = '#050505';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
-      
+
       particles.forEach((p) => {
         p.update();
         p.draw();
