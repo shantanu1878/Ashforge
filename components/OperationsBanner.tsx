@@ -75,15 +75,12 @@ const OperationsBanner: React.FC = () => {
                     <div className="relative z-20 flex-1 p-3 md:p-12 flex flex-col justify-center space-y-3 md:space-y-6">
 
                         {/* Header Logo */}
-                        <div className="flex items-center gap-2 md:gap-3">
+                        <div className="relative flex items-center pb-1">
                             {/* Stylized Logo Icon (Simulated or use Component) */}
-                            <div className="relative w-6 h-6 md:w-8 md:h-8">
+                            <div className="relative w-16 h-16 md:w-24 md:h-24">
                                 <AshforgeLogo className="w-full h-full text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]" />
                             </div>
-                            <div className="flex flex-col">
-                                <span className="text-xs md:text-lg font-black text-white tracking-widest leading-none">ASHFORGE</span>
-                                <span className="text-[7px] md:text-[9px] text-[#ff3333] tracking-[0.2em] md:tracking-[0.4em] font-bold uppercase mt-0.5 md:mt-1">Performance Engineered</span>
-                            </div>
+                            <span className="text-sm md:text-2xl font-black text-white tracking-tighter leading-none -ml-3 md:-ml-6 z-10">ASHFORGE</span>
                         </div>
 
                         {/* Main Typography */}
