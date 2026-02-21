@@ -1,6 +1,6 @@
 
 import React, { useState, useCallback } from 'react';
-import Header from './components/Header';
+import SidebarNav from './components/SidebarNav';
 import LavaBackground from './components/LavaBackground';
 import ProductCard from './components/ProductCard';
 import ProductDetail from './components/ProductDetail';
@@ -72,16 +72,17 @@ const App: React.FC = () => {
     <div className="min-h-screen selection:bg-[#ff3333] selection:text-white">
       <LavaBackground />
 
-      <Header
+      <SidebarNav
         cartCount={cart.reduce((s, i) => s + i.quantity, 0)}
         onCartToggle={() => setIsCartOpen(!isCartOpen)}
         onNavigate={(v) => {
           setView(v);
           if (v === 'SHOP') setSelectedProduct(null);
         }}
+        currentView={view}
       />
 
-      <main className="relative z-10 transition-opacity duration-500">
+      <main className="relative z-10 transition-opacity duration-500 md:pl-[72px] pb-24 md:pb-0">
         {view === 'SHOP' && (
           <div className="max-w-7xl mx-auto px-6 pt-48 pb-24">
             <div className="mb-24 space-y-8 animate-in fade-in slide-in-from-bottom-6 duration-1000">
@@ -123,6 +124,32 @@ const App: React.FC = () => {
             />
           </div>
         )}
+
+        {view === 'ABOUT' && (
+          <div className="max-w-7xl mx-auto px-6 pt-48 pb-24 min-h-screen text-center flex flex-col items-center justify-center animate-in fade-in duration-700">
+            <h1 className="text-4xl font-black text-white tracking-tighter mb-4">INDUSTRIAL LINEAGE</h1>
+            <p className="text-zinc-400 max-w-2xl text-lg font-medium leading-relaxed mb-8">
+              Forged in the fires of sector 07. We engineer the gear that engineers the future. Resilience isn't an option, it's a requirement.
+            </p>
+            <button onClick={() => navigateToShop()} className="px-8 py-3 bg-white/5 hover:bg-white/10 text-white text-xs font-black tracking-[0.2em] border border-white/10 uppercase transition-all duration-300">
+              Return to Operations
+            </button>
+          </div>
+        )}
+
+        {view === 'CONTACT' && (
+          <div className="max-w-7xl mx-auto px-6 pt-48 pb-24 min-h-screen text-center flex flex-col items-center justify-center animate-in fade-in duration-700">
+            <h1 className="text-4xl font-black text-white tracking-tighter mb-4">COMMUNIQUÉ: HQ</h1>
+            <p className="text-zinc-400 max-w-2xl text-lg font-medium leading-relaxed mb-8">
+              Transmission channels open. Awaiting encoded signal.
+            </p>
+            <div className="flex gap-4">
+              <a href="mailto:hq@ashforge.dev" className="px-8 py-3 bg-[#ff3333]/10 hover:bg-[#ff3333]/20 text-[#ff3333] text-xs font-black tracking-[0.2em] border border-[#ff3333]/20 uppercase transition-all duration-300">
+                INITIATE COMMS
+              </a>
+            </div>
+          </div>
+        )}
       </main>
 
       <CartDrawer
@@ -134,7 +161,7 @@ const App: React.FC = () => {
         onCheckout={navigateToCheckout}
       />
 
-      <footer className="relative z-10 border-t border-white/5 bg-black/60 backdrop-blur-2xl py-24 mt-24">
+      <footer className="relative z-10 border-t border-white/5 bg-black/60 backdrop-blur-2xl py-24 mt-24 md:pl-[72px] mb-16 md:mb-0">
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-16">
           <div className="col-span-1 md:col-span-2 space-y-8">
             <div className="flex items-center gap-4">

@@ -16,4 +16,4 @@ export interface CartItem extends Product {
   quantity: number;
 }
 
-export type AppView = 'SHOP' | 'PDP' | 'CHECKOUT';
+export type AppView = 'SHOP' | 'PDP' | 'CHECKOUT' | 'ABOUT' | 'CONTACT';
