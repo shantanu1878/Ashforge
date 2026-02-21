@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Home, Layers, Info, Mail, ShoppingCart, Menu, X } from 'lucide-react';
 import { AppView } from '../types';
-import AshforgeLogo from './AshforgeLogo';
+import AshforgeMark from './AshforgeMark';
 
 interface SidebarNavProps {
     cartCount: number;
@@ -15,10 +15,10 @@ const SidebarNav: React.FC<SidebarNavProps> = ({ cartCount, onCartToggle, onNavi
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
     const navItems = [
-        { icon: Home, label: 'Home', desc: 'Main Operations Hub', view: 'SHOP' as AppView },
-        { icon: Layers, label: 'Collection', desc: 'Engineering Gear', view: 'SHOP' as AppView },
-        { icon: Info, label: 'About', desc: 'Industrial Lineage', view: 'ABOUT' as AppView },
-        { icon: Mail, label: 'Contact', desc: 'Communicate with HQ', view: 'CONTACT' as AppView },
+        { icon: Home, label: 'Home', desc: 'Latest drop', view: 'SHOP' as AppView },
+        { icon: Layers, label: 'Collection', desc: 'Shop essentials', view: 'SHOP' as AppView },
+        { icon: Info, label: 'About', desc: 'Our craft', view: 'ABOUT' as AppView },
+        { icon: Mail, label: 'Contact', desc: 'Support', view: 'CONTACT' as AppView },
     ];
 
     const handleNavClick = (view: AppView) => {
@@ -30,20 +30,33 @@ const SidebarNav: React.FC<SidebarNavProps> = ({ cartCount, onCartToggle, onNavi
         <>
             {/* --- DESKTOP SIDEBAR --- */}
             <aside
-                className="hidden md:flex flex-col fixed top-0 left-0 h-screen z-50 bg-black/40 backdrop-blur-xl border-r border-[#ff3333]/10 transition-all duration-500 ease-out shadow-[4px_0_24px_rgba(0,0,0,0.5)]"
+                className="hidden md:flex flex-col fixed top-0 left-0 h-screen z-50 bg-white/5 backdrop-blur-2xl border-r border-white/10 bg-gradient-to-b from-white/[0.08] to-transparent transition-all duration-500 ease-out shadow-[4px_0_24px_rgba(0,0,0,0.5)]"
                 style={{ width: isHovered ? '260px' : '72px' }}
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
             >
                 {/* Logo Area */}
-                <div className="h-24 flex items-center justify-center border-b border-white/5 relative">
+                <div className="h-32 flex items-center justify-center border-b border-white/5 relative shrink-0">
                     <button
                         onClick={() => onNavigate('SHOP')}
-                        className="flex items-center justify-center w-full h-full relative group"
+                        className="flex flex-col items-center justify-center w-full h-full relative group p-4"
                         aria-label="Ashforge Home"
                     >
-                        <div className="w-10 h-10 group-hover:scale-110 transition-transform duration-500 flex items-center justify-center">
-                            <AshforgeLogo className="w-full h-full text-white" />
+                        {/* Container is ~56x56, logo is ~40x40. Centered with generous layout */}
+                        <div className="w-[56px] h-[56px] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform duration-500">
+                            <AshforgeMark
+                                className="w-[40px] h-[40px] text-white logoGlow transition-all duration-500"
+                                title="Ashforge Logo"
+                            />
+                        </div>
+
+                        {/* Text wordmark only visible on expanded sidebar */}
+                        <div
+                            className={`flex flex-col items-center justify-center w-full transition-all duration-500 ease-out flex-nowrap whitespace-nowrap overflow-hidden
+                                ${isHovered ? 'opacity-80 max-h-12 translate-y-0 mt-1' : 'opacity-0 max-h-0 translate-y-2 mt-0'}
+                            `}
+                        >
+                            <span className="text-[13px] font-semibold tracking-[0.2em] text-white">ASHFORGE</span>
                         </div>
                     </button>
                 </div>
@@ -64,11 +77,16 @@ const SidebarNav: React.FC<SidebarNavProps> = ({ cartCount, onCartToggle, onNavi
                             >
                                 {/* Active Indicator Accent */}
                                 {isActive && (
-                                    <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-[#ff3333] shadow-[0_0_10px_#ff3333] rounded-r-md transition-all" />
+                                    <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[2px] h-8 bg-[#ff3333] shadow-[0_0_8px_#ff3333] transition-all" />
                                 )}
 
                                 <div className="flex flex-col items-center w-full px-4 overflow-hidden">
-                                    <Icon className={`w-6 h-6 shrink-0 transition-transform duration-300 ${isActive ? 'text-[#ff3333]' : 'group-hover:text-white'} ${isHovered ? 'mb-2' : ''}`} />
+                                    <div className="relative">
+                                        {isActive && (
+                                            <div className="absolute inset-0 bg-[#ff3333] blur-md opacity-30 rounded-full scale-150 transition-all" />
+                                        )}
+                                        <Icon className={`w-6 h-6 shrink-0 transition-transform duration-300 relative z-10 ${isActive ? 'text-[#ff3333]' : 'group-hover:text-white'} ${isHovered ? 'mb-2' : ''}`} />
+                                    </div>
 
                                     {/* Expanded Content */}
                                     <div
@@ -76,7 +94,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({ cartCount, onCartToggle, onNavi
                       ${isHovered ? 'opacity-100 max-h-20 translate-y-0' : 'opacity-0 max-h-0 translate-y-2'}
                     `}
                                     >
-                                        <span className="text-xs font-black tracking-widest text-white uppercase">{item.label}</span>
+                                        <span className="text-[11px] font-extrabold tracking-widest text-white uppercase mt-1.5">{item.label}</span>
                                         <span className="text-[9px] font-medium tracking-wide text-zinc-500 mt-1">{item.desc}</span>
                                     </div>
                                 </div>
@@ -98,9 +116,12 @@ const SidebarNav: React.FC<SidebarNavProps> = ({ cartCount, onCartToggle, onNavi
                     >
                         <div className="flex flex-col items-center w-full px-4 overflow-hidden relative">
                             <div className="relative">
-                                <ShoppingCart className={`w-6 h-6 shrink-0 transition-all duration-300 group-hover:text-[#ff3333] ${isHovered ? 'mb-2' : ''}`} />
                                 {cartCount > 0 && (
-                                    <span className="absolute -top-2 -right-2 bg-[#ff3333] text-white text-[9px] font-black w-4 h-4 flex items-center justify-center rounded-none ring-2 ring-black">
+                                    <div className="absolute inset-0 bg-[#ff3333] blur-md opacity-30 rounded-full scale-150 transition-all" />
+                                )}
+                                <ShoppingCart className={`w-6 h-6 shrink-0 transition-all duration-300 relative z-10 ${cartCount > 0 ? 'text-[#ff3333]' : 'group-hover:text-white'} ${isHovered ? 'mb-2' : ''}`} />
+                                {cartCount > 0 && (
+                                    <span className="absolute -top-2 -right-2 bg-[#ff3333] text-white text-[9px] font-black w-4 h-4 flex items-center justify-center rounded-none ring-2 ring-black z-20">
                                         {cartCount}
                                     </span>
                                 )}
@@ -111,8 +132,8 @@ const SidebarNav: React.FC<SidebarNavProps> = ({ cartCount, onCartToggle, onNavi
                       ${isHovered ? 'opacity-100 max-h-20 translate-y-0' : 'opacity-0 max-h-0 translate-y-2'}
                     `}
                             >
-                                <span className="text-xs font-black tracking-widest text-white uppercase">Cart</span>
-                                <span className="text-[9px] font-medium tracking-wide text-zinc-500 mt-1">{cartCount} items</span>
+                                <span className="text-[11px] font-extrabold tracking-widest text-white uppercase mt-1.5">Cart</span>
+                                <span className="text-[9px] font-medium tracking-wide text-zinc-500 mt-1">{cartCount > 0 ? `${cartCount} items` : '0 items'}</span>
                             </div>
                         </div>
                         <div className="absolute inset-x-2 inset-y-1 bg-white/5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none -z-10" />
@@ -122,9 +143,9 @@ const SidebarNav: React.FC<SidebarNavProps> = ({ cartCount, onCartToggle, onNavi
 
             {/* --- MOBILE NAVIGATION --- */}
             {/* Mobile Top Bar (Just Logo & Hamburger) */}
-            <header className="md:hidden fixed top-0 left-0 right-0 z-40 h-16 bg-black/80 backdrop-blur-md border-b border-white/5 px-4 flex justify-between items-center bg-black/40 backdrop-blur-xl border-r border-[#ff3333]/10">
-                <button onClick={() => onNavigate('SHOP')} className="w-8 h-8 flex items-center justify-center">
-                    <AshforgeLogo className="w-full h-full text-white" />
+            <header className="md:hidden fixed top-0 left-0 right-0 z-40 h-16 bg-black/80 backdrop-blur-2xl border-b border-white/10 px-4 flex justify-between items-center">
+                <button onClick={() => onNavigate('SHOP')} className="w-8 h-8 flex items-center justify-center group">
+                    <AshforgeMark className="w-full h-full text-white logoGlow transition-all duration-500" />
                 </button>
 
                 {/* Hamburger replaced by a bottom nav, but keeping a simple header */}

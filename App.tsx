@@ -6,7 +6,7 @@ import ProductCard from './components/ProductCard';
 import ProductDetail from './components/ProductDetail';
 import CartDrawer from './components/CartDrawer';
 import Checkout from './components/Checkout';
-import AshforgeLogo from './components/AshforgeLogo';
+import AshforgeMark from './components/AshforgeMark';
 import OperationsBanner from './components/OperationsBanner';
 import { PRODUCTS } from './constants';
 import { Product, CartItem, AppView } from './types';
@@ -165,7 +165,7 @@ const App: React.FC = () => {
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-16">
           <div className="col-span-1 md:col-span-2 space-y-8">
             <div className="flex items-center gap-4">
-              <AshforgeLogo className="w-12 h-12" />
+              <AshforgeMark className="w-12 h-12" />
               <h3 className="text-4xl font-black text-white tracking-tighter">ASHFORGE</h3>
             </div>
             <p className="text-zinc-500 max-w-sm font-medium tracking-wide leading-relaxed">
@@ -173,7 +173,7 @@ const App: React.FC = () => {
             </p>
             <div className="flex gap-6">
               <div className="w-10 h-10 border border-zinc-800 flex items-center justify-center text-zinc-600 hover:text-[#ff3333] hover:border-[#ff3333] transition-all cursor-pointer group">
-                <AshforgeLogo className="w-5 h-5 opacity-40 group-hover:opacity-100 transition-opacity" />
+                <AshforgeMark className="w-5 h-5 opacity-40 group-hover:opacity-100 transition-opacity" />
               </div>
             </div>
           </div>

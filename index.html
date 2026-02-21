@@ -80,6 +80,10 @@
                 transform: scale(1.05);
             }
         }
+        /* Logo Energy Component Glow */
+        .logoGlow { filter: drop-shadow(0 0 10px rgba(255,51,51,0.28)) drop-shadow(0 0 24px rgba(255,51,51,0.14)); transition: filter 0.3s ease; }
+        .group:hover .logoGlow, .logoGlowStrong { filter: drop-shadow(0 0 14px rgba(255,51,51,0.36)) drop-shadow(0 0 34px rgba(255,51,51,0.18)); }
+
         .animate-logo-energy {
             animation: logo-energy 4s ease-in-out infinite;
         }
