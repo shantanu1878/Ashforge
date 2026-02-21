@@ -1,30 +1,34 @@
 import React from 'react';
-import { Home, Layers, Info, Mail, ShoppingCart } from 'lucide-react';
-import { AppView } from '../types';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { Home, Layers, Info, Mail, ShoppingCart, Archive, User } from 'lucide-react';
 import AshforgeMark from './AshforgeMark';
+import { isAuthed } from '../lib/auth';
 
 interface SidebarNavProps {
     cartCount: number;
     onCartToggle: () => void;
-    onNavigate: (view: AppView) => void;
-    currentView: AppView;
 }
 
-const SidebarNav: React.FC<SidebarNavProps> = ({ cartCount, onCartToggle, onNavigate, currentView }) => {
+const SidebarNav: React.FC<SidebarNavProps> = ({ cartCount, onCartToggle }) => {
+    const location = useLocation();
+    const navigate = useNavigate();
+
     const navItems = [
-        { icon: Home, label: 'Home', view: 'SHOP' as AppView },
-        { icon: Layers, label: 'Collection', view: 'SHOP' as AppView },
-        { icon: Info, label: 'About', view: 'ABOUT' as AppView },
-        { icon: Mail, label: 'Contact', view: 'CONTACT' as AppView },
+        { icon: Home, label: 'Home', path: '/' },
+        { icon: Layers, label: 'Collection', path: '/collection' },
+        { icon: Archive, label: 'Orders', path: '/orders' },
+        { icon: User, label: 'Account', path: isAuthed() ? '/account' : '/login' },
+        { icon: Info, label: 'About', path: '/about' },
+        { icon: Mail, label: 'Contact', path: '/contact' },
     ];
 
-    const glassStyles = "bg-black/50 backdrop-blur-2xl border border-white/15 shadow-lg z-50 flex flex-col items-center justify-center";
+    const glassStyles = "hidden md:flex bg-black/50 backdrop-blur-2xl border border-white/15 shadow-lg z-50 flex-col items-center justify-center";
 
     return (
         <>
             {/* Top Logo Chip */}
             <button
-                onClick={() => onNavigate('SHOP')}
+                onClick={() => navigate('/')}
                 className={`fixed top-4 left-4 w-12 h-12 md:w-14 md:h-14 rounded-2xl ${glassStyles} group transition-transform hover:scale-105`}
                 aria-label="Ashforge Home"
             >
@@ -35,12 +39,12 @@ const SidebarNav: React.FC<SidebarNavProps> = ({ cartCount, onCartToggle, onNavi
             <nav className={`fixed top-1/2 -translate-y-1/2 left-4 w-12 md:w-14 rounded-[28px] py-4 gap-4 ${glassStyles}`}>
                 {navItems.map((item) => {
                     const Icon = item.icon;
-                    const isActive = currentView === item.view;
+                    const isActive = location.pathname === item.path;
 
                     return (
                         <button
                             key={item.label}
-                            onClick={() => onNavigate(item.view)}
+                            onClick={() => navigate(item.path)}
                             className="group relative w-full h-12 flex items-center justify-center text-zinc-400 hover:text-white transition-colors duration-300"
                             aria-label={item.label}
                         >

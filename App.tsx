@@ -1,5 +1,6 @@
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
+import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import SidebarNav from './components/SidebarNav';
 import LavaBackground from './components/LavaBackground';
 import ProductCard from './components/ProductCard';
@@ -9,14 +10,76 @@ import Checkout from './components/Checkout';
 import AshforgeMark from './components/AshforgeMark';
 import OperationsBanner from './components/OperationsBanner';
 import TopBrandBar from './components/TopBrandBar';
+import MobileTopBar from './components/MobileTopBar';
+import MobileMenuDrawer from './components/MobileMenuDrawer';
+import BottomNav from './components/BottomNav';
+import FeaturedProduct from './components/FeaturedProduct';
+import Collection from './pages/Collection';
+import Orders from './pages/Orders';
+import OrderDetail from './pages/OrderDetail';
+import Login from './pages/Login';
+import Account from './pages/Account';
+import { isAuthed } from './lib/auth';
 import { PRODUCTS } from './constants';
-import { Product, CartItem, AppView } from './types';
+import { Product, CartItem } from './types';
+
+function useGridScrollRestoration() {
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.pathname === '/') {
+      const saved = sessionStorage.getItem('gridScrollY');
+      if (saved) {
+        window.scrollTo(0, parseInt(saved, 10));
+      } else {
+        window.scrollTo(0, 0);
+      }
+    }
+
+    return () => {
+      if (location.pathname === '/') {
+        sessionStorage.setItem('gridScrollY', window.scrollY.toString());
+      }
+    };
+  }, [location.pathname]);
+}
+
+const HomeGrid = ({ onAddToCart }: { onAddToCart: (product: Product) => void }) => {
+  useGridScrollRestoration();
+
+  useEffect(() => {
+    document.title = "ASHFORGE | Resilience Engineered";
+  }, []);
+
+  return (
+    <div className="max-w-7xl mx-auto px-6 pt-6 md:pt-10 pb-24">
+      <div className="mb-8 md:mb-16 space-y-8 animate-in fade-in slide-in-from-bottom-6 duration-1000">
+        <OperationsBanner />
+      </div>
+
+      <FeaturedProduct />
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-16">
+        {PRODUCTS.map((product) => (
+          <ProductCard
+            key={product.id}
+            product={product}
+            onAddToCart={(e) => {
+              e.stopPropagation();
+              onAddToCart(product);
+            }}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
 
 const App: React.FC = () => {
-  const [view, setView] = useState<AppView>('SHOP');
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   const handleAddToCart = useCallback((product: Product) => {
     setCart(prev => {
@@ -45,27 +108,15 @@ const App: React.FC = () => {
     setCart(prev => prev.filter(item => item.id !== id));
   }, []);
 
-  const navigateToPDP = (product: Product) => {
-    setSelectedProduct(product);
-    setView('PDP');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const navigateToShop = () => {
-    setView('SHOP');
-    setSelectedProduct(null);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
   const navigateToCheckout = () => {
     setIsCartOpen(false);
-    setView('CHECKOUT');
+    navigate('/checkout');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const completeCheckout = () => {
+  const completeCheckout = (orderId: string) => {
     setCart([]);
-    setView('SHOP');
+    navigate(`/orders/${orderId}`);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -76,82 +127,93 @@ const App: React.FC = () => {
       <SidebarNav
         cartCount={cart.reduce((s, i) => s + i.quantity, 0)}
         onCartToggle={() => setIsCartOpen(!isCartOpen)}
-        onNavigate={(v) => {
-          setView(v);
-          if (v === 'SHOP') setSelectedProduct(null);
-        }}
-        currentView={view}
       />
 
-      <main className="relative z-10 transition-opacity duration-500 pl-[88px] md:pl-[96px] pb-24 md:pb-0">
-        <TopBrandBar onHomeClick={navigateToShop} />
-        {view === 'SHOP' && (
-          <div className="max-w-7xl mx-auto px-6 pt-6 md:pt-10 pb-24">
-            <div className="mb-16 space-y-8 animate-in fade-in slide-in-from-bottom-6 duration-1000">
-              <OperationsBanner />
+      <MobileTopBar
+        cartCount={cart.reduce((s, i) => s + i.quantity, 0)}
+        onMenuClick={() => setIsMobileMenuOpen(true)}
+        onCartClick={() => setIsCartOpen(true)}
+      />
+
+      <MobileMenuDrawer
+        isOpen={isMobileMenuOpen}
+        onClose={() => setIsMobileMenuOpen(false)}
+      />
+
+      <main className="relative z-10 transition-opacity duration-500 pl-0 md:pl-[96px] pb-[80px] md:pb-0">
+        <TopBrandBar />
+
+        <Routes>
+          <Route path="/" element={<HomeGrid onAddToCart={handleAddToCart} />} />
+
+          <Route path="/product/:slug" element={
+            <div className="animate-in fade-in duration-700">
+              <ProductDetail onAddToCart={handleAddToCart} />
             </div>
+          } />
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-16">
-              {PRODUCTS.map((product) => (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                  onClick={() => navigateToPDP(product)}
-                  onAddToCart={(e) => {
-                    e.stopPropagation();
-                    handleAddToCart(product);
-                  }}
-                />
-              ))}
+          <Route path="/checkout" element={
+            <div className="animate-in fade-in duration-700">
+              <Checkout
+                items={cart}
+                onComplete={completeCheckout}
+                onBack={() => navigate('/')}
+              />
             </div>
-          </div>
-        )}
+          } />
 
-        {view === 'PDP' && selectedProduct && (
-          <div className="animate-in fade-in duration-700">
-            <ProductDetail
-              product={selectedProduct}
-              onAddToCart={handleAddToCart}
-              onBack={navigateToShop}
-            />
-          </div>
-        )}
-
-        {view === 'CHECKOUT' && (
-          <div className="animate-in fade-in duration-700">
-            <Checkout
-              items={cart}
-              onComplete={completeCheckout}
-              onBack={navigateToShop}
-            />
-          </div>
-        )}
-
-        {view === 'ABOUT' && (
-          <div className="max-w-7xl mx-auto px-6 pt-48 pb-24 min-h-screen text-center flex flex-col items-center justify-center animate-in fade-in duration-700">
-            <h1 className="text-4xl font-black text-white tracking-tighter mb-4">INDUSTRIAL LINEAGE</h1>
-            <p className="text-zinc-400 max-w-2xl text-lg font-medium leading-relaxed mb-8">
-              Forged in the fires of sector 07. We engineer the gear that engineers the future. Resilience isn't an option, it's a requirement.
-            </p>
-            <button onClick={() => navigateToShop()} className="px-8 py-3 bg-white/5 hover:bg-white/10 text-white text-xs font-black tracking-[0.2em] border border-white/10 uppercase transition-all duration-300">
-              Return to Operations
-            </button>
-          </div>
-        )}
-
-        {view === 'CONTACT' && (
-          <div className="max-w-7xl mx-auto px-6 pt-48 pb-24 min-h-screen text-center flex flex-col items-center justify-center animate-in fade-in duration-700">
-            <h1 className="text-4xl font-black text-white tracking-tighter mb-4">COMMUNIQUÉ: HQ</h1>
-            <p className="text-zinc-400 max-w-2xl text-lg font-medium leading-relaxed mb-8">
-              Transmission channels open. Awaiting encoded signal.
-            </p>
-            <div className="flex gap-4">
-              <a href="mailto:hq@ashforge.dev" className="px-8 py-3 bg-[#ff3333]/10 hover:bg-[#ff3333]/20 text-[#ff3333] text-xs font-black tracking-[0.2em] border border-[#ff3333]/20 uppercase transition-all duration-300">
-                INITIATE COMMS
-              </a>
+          <Route path="/about" element={
+            <div className="max-w-7xl mx-auto px-6 pt-48 pb-24 min-h-screen text-center flex flex-col items-center justify-center animate-in fade-in duration-700">
+              <h1 className="text-4xl font-black text-white tracking-tighter mb-4">INDUSTRIAL LINEAGE</h1>
+              <p className="text-zinc-400 max-w-2xl text-lg font-medium leading-relaxed mb-8">
+                Forged in the fires of sector 07. We engineer the gear that engineers the future. Resilience isn't an option, it's a requirement.
+              </p>
+              <button onClick={() => navigate('/')} className="px-8 py-3 bg-white/5 hover:bg-white/10 text-white text-xs font-black tracking-[0.2em] border border-white/10 uppercase transition-all duration-300">
+                Return to Operations
+              </button>
             </div>
-          </div>
-        )}
+          } />
+
+          <Route path="/contact" element={
+            <div className="max-w-7xl mx-auto px-6 pt-48 pb-24 min-h-screen text-center flex flex-col items-center justify-center animate-in fade-in duration-700">
+              <h1 className="text-4xl font-black text-white tracking-tighter mb-4">COMMUNIQUÉ: HQ</h1>
+              <p className="text-zinc-400 max-w-2xl text-lg font-medium leading-relaxed mb-8">
+                Transmission channels open. Awaiting encoded signal.
+              </p>
+              <div className="flex gap-4">
+                <a href="mailto:hq@ashforge.dev" className="px-8 py-3 bg-[#ff3333]/10 hover:bg-[#ff3333]/20 text-[#ff3333] text-xs font-black tracking-[0.2em] border border-[#ff3333]/20 uppercase transition-all duration-300">
+                  INITIATE COMMS
+                </a>
+              </div>
+            </div>
+          } />
+
+          {/* Auth Routes */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/account" element={<Account />} />
+
+          {/* New Ops Routes */}
+          <Route path="/collection" element={<Collection onAddToCart={handleAddToCart} />} />
+
+          {/* Protected Routes */}
+          <Route path="/orders" element={isAuthed() ? <Orders /> : <Login />} />
+          <Route path="/orders/:id" element={isAuthed() ? <OrderDetail onReorder={(items) => {
+            // Directly inject reorder requests into the shopping cart State mapping
+            setCart(prev => {
+              const updated = [...prev];
+              items.forEach(newItem => {
+                const existing = updated.find(i => i.id === newItem.id);
+                if (existing) {
+                  existing.quantity += newItem.quantity;
+                } else {
+                  updated.push(newItem);
+                }
+              });
+              return updated;
+            });
+            setIsCartOpen(true);
+          }} /> : <Login />} />
+        </Routes>
       </main>
 
       <CartDrawer
@@ -163,7 +225,12 @@ const App: React.FC = () => {
         onCheckout={navigateToCheckout}
       />
 
-      <footer className="relative z-10 border-t border-white/5 bg-black/60 backdrop-blur-2xl py-24 mt-24 pl-[88px] md:pl-[96px] mb-16 md:mb-0">
+      <BottomNav
+        cartCount={cart.reduce((s, i) => s + i.quantity, 0)}
+        onCartToggle={() => setIsCartOpen(!isCartOpen)}
+      />
+
+      <footer className="relative z-10 border-t border-white/5 bg-black/60 backdrop-blur-2xl py-24 md:mt-24 pl-0 md:pl-[96px] pb-[120px] md:pb-0">
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-16">
           <div className="col-span-1 md:col-span-2 space-y-8">
             <div className="flex items-center gap-4">

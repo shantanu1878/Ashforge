@@ -3,19 +3,23 @@ import React from 'react';
 import { Product } from '../types';
 import { Shield, Plus, ArrowUpRight } from 'lucide-react';
 
+import { useNavigate } from 'react-router-dom';
+
 interface ProductCardProps {
   product: Product;
-  onClick: () => void;
   onAddToCart: (e: React.MouseEvent) => void;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ product, onClick, onAddToCart }) => {
+const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
+  const navigate = useNavigate();
   const isOutOfStock = product.stock === 'DEPLETED';
 
   return (
     <div
-      onClick={onClick}
-      className="group relative flex flex-col h-full bg-[#0a0a0a]/80 border border-[#333] hover:border-[#555] transition-all duration-700 cursor-pointer overflow-hidden backdrop-blur-md magma-glow"
+      onClick={() => navigate(`/product/${product.slug}`)}
+      tabIndex={0}
+      onKeyDown={(e) => e.key === 'Enter' && navigate(`/product/${product.slug}`)}
+      className="group relative flex flex-col h-full bg-[#0a0a0a]/80 border border-[#333] hover:border-[#555] transition-all duration-700 cursor-pointer overflow-hidden backdrop-blur-md magma-glow outline-none focus-visible:ring-2 focus-visible:ring-[#ff3333]"
     >
       {/* Visual Accents */}
       <div className="absolute top-0 right-0 p-2 opacity-20 group-hover:opacity-100 transition-opacity z-20">
@@ -81,8 +85,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onClick, onAddToCart
             onClick={onAddToCart}
             disabled={isOutOfStock}
             className={`flex items-center justify-center gap-3 w-full h-14 px-5 transition-all duration-300 font-black text-[11px] tracking-[0.3em] glitch-hover ${isOutOfStock
-                ? 'border border-zinc-900 text-zinc-800 cursor-not-allowed bg-zinc-950 opacity-40'
-                : 'bg-zinc-900 border-2 border-[#ff3333] text-white hover:bg-[#ff3333] hover:shadow-[0_0_20px_rgba(255,51,51,0.4)]'
+              ? 'border border-zinc-900 text-zinc-800 cursor-not-allowed bg-zinc-950 opacity-40'
+              : 'bg-zinc-900 border-2 border-[#ff3333] text-white hover:bg-[#ff3333] hover:shadow-[0_0_20px_rgba(255,51,51,0.4)]'
               }`}
           >
             <Plus size={16} strokeWidth={3} />

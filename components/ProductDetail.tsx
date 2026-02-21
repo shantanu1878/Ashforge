@@ -1,17 +1,42 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Product } from '../types';
+import { getProductBySlug } from '../lib/products';
 import { ChevronDown, ChevronUp, Shield, Activity, Map, ArrowLeft, Plus, Share2, Hexagon } from 'lucide-react';
 
 interface ProductDetailProps {
-  product: Product;
   onAddToCart: (product: Product) => void;
-  onBack: () => void;
 }
 
-const ProductDetail: React.FC<ProductDetailProps> = ({ product, onAddToCart, onBack }) => {
+const ProductDetail: React.FC<ProductDetailProps> = ({ onAddToCart }) => {
+  const { slug } = useParams<{ slug: string }>();
+  const navigate = useNavigate();
+  const product = slug ? getProductBySlug(slug) : undefined;
+
   const [activeImg, setActiveImg] = useState(0);
   const [activeSection, setActiveSection] = useState<string | null>('specs');
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    if (product) {
+      document.title = `ASHFORGE — ${product.name}`;
+    }
+  }, [product]);
+
+  if (!product) {
+    return (
+      <div className="max-w-7xl mx-auto px-6 py-48 min-h-screen text-center flex flex-col items-center justify-center animate-in fade-in duration-700">
+        <h1 className="text-4xl font-black text-white tracking-tighter mb-4">ASSET NOT FOUND</h1>
+        <p className="text-zinc-400 max-w-2xl text-lg font-medium leading-relaxed mb-8">
+          The requested hardware schematic could not be located in our databanks.
+        </p>
+        <button onClick={() => navigate('/')} className="px-8 py-3 bg-white/5 hover:bg-white/10 text-white text-xs font-black tracking-[0.2em] border border-white/10 uppercase transition-all duration-300">
+          Return to Operations
+        </button>
+      </div>
+    );
+  }
 
   const sections = [
     { id: 'specs', title: 'TECHNICAL SPECS', content: product.specs.join(', ') },
@@ -32,8 +57,14 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onAddToCart, onB
   return (
     <div className="max-w-7xl mx-auto px-6 py-24 min-h-screen">
       <button
-        onClick={onBack}
-        className="flex items-center gap-3 text-zinc-500 hover:text-white transition-all mb-12 font-black tracking-[0.3em] text-[10px] group"
+        onClick={() => {
+          if (window.history.length > 2) {
+            navigate(-1);
+          } else {
+            navigate('/');
+          }
+        }}
+        className="flex items-center gap-3 text-zinc-500 hover:text-white transition-all mb-12 font-black tracking-[0.3em] text-[10px] group outline-none focus-visible:text-white"
       >
         <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
         RETURN TO GRID
