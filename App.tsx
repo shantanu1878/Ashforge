@@ -8,10 +8,10 @@ import ProductDetail from './components/ProductDetail';
 import CartDrawer from './components/CartDrawer';
 import Checkout from './components/Checkout';
 import AshforgeMark from './components/AshforgeMark';
-import OperationsBanner from './components/OperationsBanner';
-import TopBrandBar from './components/TopBrandBar';
+import HeroOverview from './components/HeroOverview';
 import MobileTopBar from './components/MobileTopBar';
 import MobileMenuDrawer from './components/MobileMenuDrawer';
+import TopBrandBar from './components/TopBrandBar';
 import BottomNav from './components/BottomNav';
 import FeaturedProduct from './components/FeaturedProduct';
 import Collection from './pages/Collection';
@@ -54,7 +54,9 @@ const HomeGrid = ({ onAddToCart }: { onAddToCart: (product: Product) => void }) 
   return (
     <div className="max-w-7xl mx-auto px-6 pt-6 md:pt-10 pb-24">
       <div className="mb-8 md:mb-16 space-y-8 animate-in fade-in slide-in-from-bottom-6 duration-1000">
-        <OperationsBanner />
+        <HeroOverview />
+
+        {/* Featured Product Mobile Breakout (Only home view equivalent if desired, currently coupled to HomeGrid implicitly below) */}
       </div>
 
       <FeaturedProduct />
@@ -124,6 +126,8 @@ const App: React.FC = () => {
     <div className="min-h-screen selection:bg-[#ff3333] selection:text-white">
       <LavaBackground />
 
+      <TopBrandBar />
+
       <SidebarNav
         cartCount={cart.reduce((s, i) => s + i.quantity, 0)}
         onCartToggle={() => setIsCartOpen(!isCartOpen)}
@@ -141,7 +145,6 @@ const App: React.FC = () => {
       />
 
       <main className="relative z-10 transition-opacity duration-500 pl-0 md:pl-[96px] pb-[80px] md:pb-0">
-        <TopBrandBar />
 
         <Routes>
           <Route path="/" element={<HomeGrid onAddToCart={handleAddToCart} />} />

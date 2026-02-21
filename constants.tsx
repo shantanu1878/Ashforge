@@ -12,7 +12,7 @@ export const PRODUCTS: Product[] = [
     price: 799,
     image: '/Frostline Vector .jpeg',
     images: [
-      '/product-quicksilver.jpg',
+      '/Frostline Vector .jpeg',
       // 'https://picsum.photos/seed/forge1b/800/1000',
       // 'https://picsum.photos/seed/forge1c/800/1000'
     ],
