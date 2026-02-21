@@ -8,6 +8,7 @@ import CartDrawer from './components/CartDrawer';
 import Checkout from './components/Checkout';
 import AshforgeMark from './components/AshforgeMark';
 import OperationsBanner from './components/OperationsBanner';
+import TopBrandBar from './components/TopBrandBar';
 import { PRODUCTS } from './constants';
 import { Product, CartItem, AppView } from './types';
 
@@ -82,10 +83,11 @@ const App: React.FC = () => {
         currentView={view}
       />
 
-      <main className="relative z-10 transition-opacity duration-500 md:pl-[72px] pb-24 md:pb-0">
+      <main className="relative z-10 transition-opacity duration-500 pl-[88px] md:pl-[96px] pb-24 md:pb-0">
+        <TopBrandBar onHomeClick={navigateToShop} />
         {view === 'SHOP' && (
-          <div className="max-w-7xl mx-auto px-6 pt-48 pb-24">
-            <div className="mb-24 space-y-8 animate-in fade-in slide-in-from-bottom-6 duration-1000">
+          <div className="max-w-7xl mx-auto px-6 pt-6 md:pt-10 pb-24">
+            <div className="mb-16 space-y-8 animate-in fade-in slide-in-from-bottom-6 duration-1000">
               <OperationsBanner />
             </div>
 
@@ -161,7 +163,7 @@ const App: React.FC = () => {
         onCheckout={navigateToCheckout}
       />
 
-      <footer className="relative z-10 border-t border-white/5 bg-black/60 backdrop-blur-2xl py-24 mt-24 md:pl-[72px] mb-16 md:mb-0">
+      <footer className="relative z-10 border-t border-white/5 bg-black/60 backdrop-blur-2xl py-24 mt-24 pl-[88px] md:pl-[96px] mb-16 md:mb-0">
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-16">
           <div className="col-span-1 md:col-span-2 space-y-8">
             <div className="flex items-center gap-4">

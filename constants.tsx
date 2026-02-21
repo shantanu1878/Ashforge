@@ -5,15 +5,15 @@ export const PRODUCTS: Product[] = [
   {
     id: 'unit-001',
     sku: 'AF-QS-99',
-    name: 'Quicksilver Cast',
+    name: 'Frostline Vector',
     category: 'Precision Mastery',
     description: 'High-visibility metallic grey with precision-etched textures designed to reflect the pursuit of perfection. Engineered for low-drag operations and maximum agility.',
     price: 799,
-    image: '/product-quicksilver.jpg',
+    image: '/Frostline Vector .jpeg',
     images: [
       '/product-quicksilver.jpg',
-      'https://picsum.photos/seed/forge1b/800/1000',
-      'https://picsum.photos/seed/forge1c/800/1000'
+      // 'https://picsum.photos/seed/forge1b/800/1000',
+      // 'https://picsum.photos/seed/forge1c/800/1000'
     ],
     stock: 'NOMINAL',
     specs: ['99.9% Titanium Alloy', 'Zero-friction Coating', 'Dynamic Thermal Venting']
@@ -21,14 +21,14 @@ export const PRODUCTS: Product[] = [
   {
     id: 'unit-002',
     sku: 'AF-CT-88',
-    name: 'Cobalt Temper',
+    name: 'Bloodforge Apex',
     category: 'Thermal Regulation',
     description: 'Industrial blue performance set utilizing hexagonal conduits to dissipate heat like a high-performance engine. Built for sustained high-intensity environments.',
     price: 799,
-    image: '/product-cobalt.jpg',
+    image: '/Bloodforge Apex.jpeg',
     images: [
-      '/product-cobalt.jpg',
-      'https://picsum.photos/seed/forge2b/800/1000'
+      '/Bloodforge Apex.jpeg',
+      // 'https://picsum.photos/seed/forge2b/800/1000'
     ],
     stock: 'CRITICAL',
     specs: ['Hex-Grid Cooling', 'Impact Resistance Level 4', 'Smart Fiber Integration']

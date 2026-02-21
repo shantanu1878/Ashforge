@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import AshforgeLogo from './AshforgeLogo';
 
 const OperationsBanner: React.FC = () => {
     // Timer logic: Fixed countdown for demo purposes, resetting every 24h
@@ -73,15 +72,6 @@ const OperationsBanner: React.FC = () => {
 
                     {/* Left Content Section */}
                     <div className="relative z-20 flex-1 p-3 md:p-12 flex flex-col justify-center space-y-3 md:space-y-6">
-
-                        {/* Header Logo */}
-                        <div className="relative flex items-center pb-1">
-                            {/* Stylized Logo Icon (Simulated or use Component) */}
-                            <div className="relative w-16 h-16 md:w-24 md:h-24">
-                                <AshforgeLogo className="w-full h-full text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]" />
-                            </div>
-                            <span className="text-sm md:text-2xl font-black text-white tracking-tighter leading-none -ml-3 md:-ml-6 z-10">ASHFORGE</span>
-                        </div>
 
                         {/* Main Typography */}
                         <div className="space-y-0.5 md:space-y-1">

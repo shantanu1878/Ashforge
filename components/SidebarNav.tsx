@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Home, Layers, Info, Mail, ShoppingCart, Menu, X } from 'lucide-react';
+import React from 'react';
+import { Home, Layers, Info, Mail, ShoppingCart } from 'lucide-react';
 import { AppView } from '../types';
 import AshforgeMark from './AshforgeMark';
 
@@ -11,182 +11,87 @@ interface SidebarNavProps {
 }
 
 const SidebarNav: React.FC<SidebarNavProps> = ({ cartCount, onCartToggle, onNavigate, currentView }) => {
-    const [isHovered, setIsHovered] = useState(false);
-    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
     const navItems = [
-        { icon: Home, label: 'Home', desc: 'Latest drop', view: 'SHOP' as AppView },
-        { icon: Layers, label: 'Collection', desc: 'Shop essentials', view: 'SHOP' as AppView },
-        { icon: Info, label: 'About', desc: 'Our craft', view: 'ABOUT' as AppView },
-        { icon: Mail, label: 'Contact', desc: 'Support', view: 'CONTACT' as AppView },
+        { icon: Home, label: 'Home', view: 'SHOP' as AppView },
+        { icon: Layers, label: 'Collection', view: 'SHOP' as AppView },
+        { icon: Info, label: 'About', view: 'ABOUT' as AppView },
+        { icon: Mail, label: 'Contact', view: 'CONTACT' as AppView },
     ];
 
-    const handleNavClick = (view: AppView) => {
-        onNavigate(view);
-        setMobileMenuOpen(false);
-    };
+    const glassStyles = "bg-black/50 backdrop-blur-2xl border border-white/15 shadow-lg z-50 flex flex-col items-center justify-center";
 
     return (
         <>
-            {/* --- DESKTOP SIDEBAR --- */}
-            <aside
-                className="hidden md:flex flex-col fixed top-0 left-0 h-screen z-50 bg-white/5 backdrop-blur-2xl border-r border-white/10 bg-gradient-to-b from-white/[0.08] to-transparent transition-all duration-500 ease-out shadow-[4px_0_24px_rgba(0,0,0,0.5)]"
-                style={{ width: isHovered ? '260px' : '72px' }}
-                onMouseEnter={() => setIsHovered(true)}
-                onMouseLeave={() => setIsHovered(false)}
+            {/* Top Logo Chip */}
+            <button
+                onClick={() => onNavigate('SHOP')}
+                className={`fixed top-4 left-4 w-12 h-12 md:w-14 md:h-14 rounded-2xl ${glassStyles} group transition-transform hover:scale-105`}
+                aria-label="Ashforge Home"
             >
-                {/* Logo Area */}
-                <div className="h-32 flex items-center justify-center border-b border-white/5 relative shrink-0">
-                    <button
-                        onClick={() => onNavigate('SHOP')}
-                        className="flex flex-col items-center justify-center w-full h-full relative group p-4"
-                        aria-label="Ashforge Home"
-                    >
-                        {/* Container is ~56x56, logo is ~40x40. Centered with generous layout */}
-                        <div className="w-[56px] h-[56px] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform duration-500">
-                            <AshforgeMark
-                                className="w-[40px] h-[40px] text-white logoGlow transition-all duration-500"
-                                title="Ashforge Logo"
-                            />
-                        </div>
+                <AshforgeMark className="w-6 h-6 md:w-8 md:h-8 text-white transition-all duration-300 group-hover:drop-shadow-[0_0_15px_rgba(255,51,51,0.6)]" title="Ashforge Logo" />
+            </button>
 
-                        {/* Text wordmark only visible on expanded sidebar */}
-                        <div
-                            className={`flex flex-col items-center justify-center w-full transition-all duration-500 ease-out flex-nowrap whitespace-nowrap overflow-hidden
-                                ${isHovered ? 'opacity-80 max-h-12 translate-y-0 mt-1' : 'opacity-0 max-h-0 translate-y-2 mt-0'}
-                            `}
-                        >
-                            <span className="text-[13px] font-semibold tracking-[0.2em] text-white">ASHFORGE</span>
-                        </div>
-                    </button>
-                </div>
-
-                {/* Navigation Items */}
-                <nav className="flex-1 py-8 flex flex-col gap-2 overflow-y-auto no-scrollbar">
-                    {navItems.map((item) => {
-                        const Icon = item.icon;
-                        const isActive = currentView === item.view; // Very basic active check
-
-                        return (
-                            <button
-                                key={item.label}
-                                onClick={() => handleNavClick(item.view)}
-                                className="group relative flex flex-col items-center justify-center w-full min-h-[72px] text-zinc-400 hover:text-white transition-colors duration-300 pointer-events-auto"
-                                aria-label={item.label}
-                                title={!isHovered ? item.label : undefined} // Native tooltip on collapsed
-                            >
-                                {/* Active Indicator Accent */}
-                                {isActive && (
-                                    <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[2px] h-8 bg-[#ff3333] shadow-[0_0_8px_#ff3333] transition-all" />
-                                )}
-
-                                <div className="flex flex-col items-center w-full px-4 overflow-hidden">
-                                    <div className="relative">
-                                        {isActive && (
-                                            <div className="absolute inset-0 bg-[#ff3333] blur-md opacity-30 rounded-full scale-150 transition-all" />
-                                        )}
-                                        <Icon className={`w-6 h-6 shrink-0 transition-transform duration-300 relative z-10 ${isActive ? 'text-[#ff3333]' : 'group-hover:text-white'} ${isHovered ? 'mb-2' : ''}`} />
-                                    </div>
-
-                                    {/* Expanded Content */}
-                                    <div
-                                        className={`flex flex-col items-center justify-center w-full transition-all duration-500 ease-out flex-nowrap whitespace-nowrap overflow-hidden
-                      ${isHovered ? 'opacity-100 max-h-20 translate-y-0' : 'opacity-0 max-h-0 translate-y-2'}
-                    `}
-                                    >
-                                        <span className="text-[11px] font-extrabold tracking-widest text-white uppercase mt-1.5">{item.label}</span>
-                                        <span className="text-[9px] font-medium tracking-wide text-zinc-500 mt-1">{item.desc}</span>
-                                    </div>
-                                </div>
-
-                                {/* Subtle Hover Background */}
-                                <div className="absolute inset-x-2 inset-y-1 bg-white/5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none -z-10" />
-                            </button>
-                        );
-                    })}
-                </nav>
-
-                {/* Bottom Actions (Cart) */}
-                <div className="py-6 border-t border-white/5">
-                    <button
-                        onClick={onCartToggle}
-                        className="group relative flex flex-col items-center justify-center w-full min-h-[72px] text-zinc-400 hover:text-white transition-colors duration-300"
-                        aria-label={`Cart (${cartCount})`}
-                        title={!isHovered ? 'Cart' : undefined}
-                    >
-                        <div className="flex flex-col items-center w-full px-4 overflow-hidden relative">
-                            <div className="relative">
-                                {cartCount > 0 && (
-                                    <div className="absolute inset-0 bg-[#ff3333] blur-md opacity-30 rounded-full scale-150 transition-all" />
-                                )}
-                                <ShoppingCart className={`w-6 h-6 shrink-0 transition-all duration-300 relative z-10 ${cartCount > 0 ? 'text-[#ff3333]' : 'group-hover:text-white'} ${isHovered ? 'mb-2' : ''}`} />
-                                {cartCount > 0 && (
-                                    <span className="absolute -top-2 -right-2 bg-[#ff3333] text-white text-[9px] font-black w-4 h-4 flex items-center justify-center rounded-none ring-2 ring-black z-20">
-                                        {cartCount}
-                                    </span>
-                                )}
-                            </div>
-
-                            <div
-                                className={`flex flex-col items-center justify-center w-full transition-all duration-500 ease-out flex-nowrap whitespace-nowrap overflow-hidden
-                      ${isHovered ? 'opacity-100 max-h-20 translate-y-0' : 'opacity-0 max-h-0 translate-y-2'}
-                    `}
-                            >
-                                <span className="text-[11px] font-extrabold tracking-widest text-white uppercase mt-1.5">Cart</span>
-                                <span className="text-[9px] font-medium tracking-wide text-zinc-500 mt-1">{cartCount > 0 ? `${cartCount} items` : '0 items'}</span>
-                            </div>
-                        </div>
-                        <div className="absolute inset-x-2 inset-y-1 bg-white/5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none -z-10" />
-                    </button>
-                </div>
-            </aside>
-
-            {/* --- MOBILE NAVIGATION --- */}
-            {/* Mobile Top Bar (Just Logo & Hamburger) */}
-            <header className="md:hidden fixed top-0 left-0 right-0 z-40 h-16 bg-black/80 backdrop-blur-2xl border-b border-white/10 px-4 flex justify-between items-center">
-                <button onClick={() => onNavigate('SHOP')} className="w-8 h-8 flex items-center justify-center group">
-                    <AshforgeMark className="w-full h-full text-white logoGlow transition-all duration-500" />
-                </button>
-
-                {/* Hamburger replaced by a bottom nav, but keeping a simple header */}
-                <div className="text-sm font-black tracking-widest text-white uppercase">ASHFORGE</div>
-
-                <div className="w-8" /> {/* Spacer to center title */}
-            </header>
-
-            {/* Mobile Bottom Nav */}
-            <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 h-16 bg-black/85 backdrop-blur-xl border-t border-white/10 px-6 flex justify-between items-center pb-safe">
-                {navItems.slice(0, 3).map((item) => {
+            {/* Middle Nav Capsule */}
+            <nav className={`fixed top-1/2 -translate-y-1/2 left-4 w-12 md:w-14 rounded-[28px] py-4 gap-4 ${glassStyles}`}>
+                {navItems.map((item) => {
                     const Icon = item.icon;
                     const isActive = currentView === item.view;
+
                     return (
                         <button
                             key={item.label}
-                            onClick={() => handleNavClick(item.view)}
-                            className={`relative flex flex-col items-center justify-center w-12 h-full gap-1 transition-colors ${isActive ? 'text-[#ff3333]' : 'text-zinc-400'}`}
+                            onClick={() => onNavigate(item.view)}
+                            className="group relative w-full h-12 flex items-center justify-center text-zinc-400 hover:text-white transition-colors duration-300"
+                            aria-label={item.label}
                         >
-                            <Icon className="w-5 h-5" />
-                            <span className="text-[9px] font-medium tracking-widest uppercase">{item.label}</span>
-                            {isActive && <div className="absolute -top-px left-1/2 -translate-x-1/2 w-8 h-0.5 bg-[#ff3333] rounded-b-md" />}
+                            {/* Active Indicator Line */}
+                            {isActive && (
+                                <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-6 bg-[#ff3333] shadow-[0_0_8px_#ff3333] rounded-r-md transition-all" />
+                            )}
+
+                            <div className="relative">
+                                {/* Soft red glow underneath active icon */}
+                                {isActive && (
+                                    <div className="absolute inset-0 bg-[#ff3333] blur-md opacity-30 rounded-full scale-150 transition-all pointer-events-none" />
+                                )}
+                                <Icon className={`w-5 h-5 md:w-6 md:h-6 shrink-0 transition-all duration-300 relative z-10 ${isActive ? 'text-[#ff3333]' : 'group-hover:text-white group-hover:scale-110'}`} />
+                            </div>
+
+                            {/* Floating Tooltip (Desktop Hover & Mobile Label logic) */}
+                            <div className="absolute left-[calc(100%+16px)] px-3 py-1.5 bg-black/80 backdrop-blur-xl border border-white/10 rounded-lg opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 pointer-events-none whitespace-nowrap hidden md:block z-50 shadow-xl">
+                                <span className="text-xs font-bold tracking-widest text-white uppercase">{item.label}</span>
+                                {/* Small left pointing triangle for tooltip */}
+                                <div className="absolute top-1/2 -left-[5px] -translate-y-1/2 w-0 h-0 border-y-[5px] border-y-transparent border-r-[6px] border-r-white/10" />
+                            </div>
                         </button>
-                    )
+                    );
                 })}
-                {/* Cart in Mobile Nav */}
-                <button
-                    onClick={onCartToggle}
-                    className="relative flex flex-col items-center justify-center w-12 h-full gap-1 text-zinc-400"
-                >
-                    <div className="relative">
-                        <ShoppingCart className="w-5 h-5" />
-                        {cartCount > 0 && (
-                            <span className="absolute -top-1.5 -right-2 bg-[#ff3333] text-white text-[8px] font-black w-3.5 h-3.5 flex items-center justify-center rounded-full ring-2 ring-black">
-                                {cartCount}
-                            </span>
-                        )}
-                    </div>
-                    <span className="text-[9px] font-medium tracking-widest uppercase">Cart</span>
-                </button>
             </nav>
+
+            {/* Bottom Cart Chip */}
+            <button
+                onClick={onCartToggle}
+                className={`fixed bottom-4 left-4 w-12 h-12 md:w-14 md:h-14 rounded-2xl ${glassStyles} group transition-all duration-300 hover:border-white/20`}
+                aria-label={`Cart (${cartCount})`}
+            >
+                <div className="relative">
+                    {cartCount > 0 && (
+                        <div className="absolute inset-0 bg-[#ff3333] blur-md opacity-30 rounded-full scale-150 transition-all pointer-events-none" />
+                    )}
+                    <ShoppingCart className={`w-5 h-5 md:w-6 md:h-6 shrink-0 transition-all duration-300 relative z-10 ${cartCount > 0 ? 'text-[#ff3333]' : 'text-zinc-400 group-hover:text-white group-hover:-translate-y-0.5'}`} />
+                    {cartCount > 0 && (
+                        <span className="absolute -top-2 -right-2 bg-[#ff3333] text-white text-[9px] md:text-[10px] font-black w-4 md:w-4.5 h-4 md:h-4.5 flex items-center justify-center rounded-sm ring-2 ring-black/80 z-20 shadow-[0_0_10px_rgba(255,51,51,0.5)]">
+                            {cartCount}
+                        </span>
+                    )}
+
+                    {/* Floating Tooltip Cart */}
+                    <div className="absolute left-[calc(100%+24px)] top-1/2 -translate-y-1/2 px-3 py-1.5 bg-black/80 backdrop-blur-xl border border-white/10 rounded-lg opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 pointer-events-none whitespace-nowrap hidden md:block z-50 shadow-xl">
+                        <span className="text-xs font-bold tracking-widest text-white uppercase">Cart</span>
+                        <div className="absolute top-1/2 -left-[5px] -translate-y-1/2 w-0 h-0 border-y-[5px] border-y-transparent border-r-[6px] border-r-white/10" />
+                    </div>
+                </div>
+            </button>
         </>
     );
 };
